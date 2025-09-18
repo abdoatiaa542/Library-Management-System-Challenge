@@ -21,14 +21,4 @@ It allows library staff to manage books, members, borrowing and return transacti
 ![WhatsApp Image 2025-09-19 at 01 43 02_37a24183](https://github.com/user-attachments/assets/2aabeed4-86fa-4bd3-b440-aa5cc65ce749)
 
 
-![ERD Diagram]()
 
----
-
-## 🗄️ Database Schema & Sample Data
-The database schema and sample data are provided in the `sql/` folder.  
-You can run the following to create the database:
-
-```sql
-CREATE DATABASE IF NOT EXISTS lms;
-USE lms;
