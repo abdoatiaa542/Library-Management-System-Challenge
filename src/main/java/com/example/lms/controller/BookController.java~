@@ -1,0 +1,46 @@
+package com.example.lms.controller;
+
+import com.example.lms.dto.BookRequest;
+import com.example.lms.service.BookService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/books")
+@RequiredArgsConstructor
+public class BookController {
+    private final BookService bookService;
+
+
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN')")
+    public ResponseEntity<?> addBook(@RequestBody BookRequest request) {
+        return ResponseEntity.ok(bookService.addBook(request));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN','STAFF','MEMBER')")
+    public ResponseEntity<?> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN','STAFF','MEMBER')")
+    public ResponseEntity<?> getBookById(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getBookById(id));
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN')")
+    public ResponseEntity<?> updateBook(@PathVariable Long id, @RequestBody BookRequest request) {
+        return ResponseEntity.ok(bookService.updateBook(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN')")
+    public ResponseEntity<?> deleteBook(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.deleteBook(id));
+    }
+}

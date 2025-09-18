@@ -1,0 +1,55 @@
+package com.example.lms.controller;
+
+
+import com.example.lms.dto.MemberRequest;
+import com.example.lms.service.MemberService;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/members")
+@RequiredArgsConstructor
+public class MemberController {
+
+    private final MemberService memberService;
+    private static final Logger log = LoggerFactory.getLogger(MemberController.class);
+
+    @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN')")
+    public ResponseEntity<?> addMember(@RequestBody MemberRequest request) {
+        log.info("Adding new member: {}", request.getFullName());
+        return ResponseEntity.ok(memberService.addMember(request));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN','STAFF')")
+    public ResponseEntity<?> getAllMembers() {
+        log.info("Fetching all members");
+        return ResponseEntity.ok(memberService.getAllMembers());
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN','STAFF','MEMBER')")
+    public ResponseEntity<?> getMemberById(@PathVariable Long id) {
+        log.info("Fetching member with ID: {}", id);
+        return ResponseEntity.ok(memberService.getMemberById(id));
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN','MEMBER')")
+    public ResponseEntity<?> updateMember(@PathVariable Long id, @RequestBody MemberRequest request) {
+        log.info("Updating member with ID: {}", id);
+        return ResponseEntity.ok(memberService.updateMember(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteMember(@PathVariable Long id) {
+        log.info("Deleting member with ID: {}", id);
+        return ResponseEntity.ok(memberService.deleteMember(id));
+    }
+}

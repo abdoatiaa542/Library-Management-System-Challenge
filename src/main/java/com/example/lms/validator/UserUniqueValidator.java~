@@ -1,0 +1,4 @@
+package com.example.lms.validator;
+
+public class UserUniqueValidator {
+}

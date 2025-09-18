@@ -1,0 +1,112 @@
+package com.example.lms.service;
+
+import com.example.lms.dto.ApiResponse;
+import com.example.lms.dto.BookRequest;
+import com.example.lms.dto.BookResponse;
+import com.example.lms.exception.ResourceNotFoundException;
+import com.example.lms.mapper.BookMapper;
+import com.example.lms.model.Book;
+import com.example.lms.model.Publisher;
+import com.example.lms.repository.AuthorRepository;
+import com.example.lms.repository.BookRepository;
+import com.example.lms.repository.CategoryRepository;
+import com.example.lms.repository.PublisherRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class BookServiceImpl implements BookService {
+
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final CategoryRepository categoryRepository;
+    private final PublisherRepository publisherRepository;
+
+    @Override
+    public ApiResponse addBook(BookRequest request) {
+        Book book = Book.builder()
+                .title(request.getTitle())
+                .isbn(request.getIsbn())
+                .publicationYear(request.getPublicationYear())
+                .edition(request.getEdition())
+                .summary(request.getSummary())
+                .coverImageUrl(request.getCoverImageUrl())
+                .build();
+
+        if (request.getAuthorIds() != null) {
+            book.setAuthors(authorRepository.findAllById(request.getAuthorIds()).stream().collect(Collectors.toSet()));
+        }
+
+        if (request.getCategoryIds() != null) {
+            book.setCategories(categoryRepository.findAllById(request.getCategoryIds()).stream().collect(Collectors.toSet()));
+        }
+
+        if (request.getPublisherId() != null) {
+            Publisher publisher = publisherRepository.findById(request.getPublisherId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Publisher not found"));
+            book.setPublisher(publisher);
+        }
+
+        Book saved = bookRepository.save(book);
+        return ApiResponse.of("Book created successfully", BookMapper.toResponse(saved));
+    }
+
+    @Override
+    public ApiResponse getAllBooks() {
+        List<BookResponse> responses = bookRepository.findAll()
+                .stream().map(BookMapper::toResponse).collect(Collectors.toList());
+        if (responses.isEmpty()) {
+            return ApiResponse.of("No books found");
+        }
+        return ApiResponse.of("Books fetched successfully", responses);
+    }
+
+    @Override
+    public ApiResponse getBookById(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        return ApiResponse.of("Book fetched successfully", BookMapper.toResponse(book));
+    }
+
+    @Override
+    public ApiResponse updateBook(Long id, BookRequest request) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+
+        if (request.getTitle() != null) book.setTitle(request.getTitle());
+        if (request.getIsbn() != null) book.setIsbn(request.getIsbn());
+        if (request.getPublicationYear() != null) book.setPublicationYear(request.getPublicationYear());
+        if (request.getEdition() != null) book.setEdition(request.getEdition());
+        if (request.getSummary() != null) book.setSummary(request.getSummary());
+        if (request.getCoverImageUrl() != null) book.setCoverImageUrl(request.getCoverImageUrl());
+
+        if (request.getAuthorIds() != null) {
+            book.setAuthors(authorRepository.findAllById(request.getAuthorIds()).stream().collect(Collectors.toSet()));
+        }
+
+        if (request.getCategoryIds() != null) {
+            book.setCategories(categoryRepository.findAllById(request.getCategoryIds()).stream().collect(Collectors.toSet()));
+        }
+
+        if (request.getPublisherId() != null) {
+            Publisher publisher = publisherRepository.findById(request.getPublisherId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Publisher not found"));
+            book.setPublisher(publisher);
+        }
+
+        Book updated = bookRepository.save(book);
+        return ApiResponse.of("Book updated successfully", BookMapper.toResponse(updated));
+    }
+
+    @Override
+    public ApiResponse deleteBook(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        bookRepository.delete(book);
+        return ApiResponse.of("Book deleted successfully");
+    }
+}

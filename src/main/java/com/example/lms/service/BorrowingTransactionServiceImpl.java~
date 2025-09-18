@@ -1,0 +1,84 @@
+package com.example.lms.service;
+
+
+import com.example.lms.dto.ApiResponse;
+import com.example.lms.dto.BorrowRequest;
+import com.example.lms.dto.BorrowResponse;
+import com.example.lms.exception.ResourceNotFoundException;
+import com.example.lms.mapper.BorrowingTransactionMapper;
+import com.example.lms.model.Book;
+import com.example.lms.model.BorrowingTransaction;
+import com.example.lms.model.Member;
+import com.example.lms.model.users.Librarian;
+import com.example.lms.model.users.User;
+import com.example.lms.repository.BookRepository;
+import com.example.lms.repository.BorrowingTransactionRepository;
+import com.example.lms.repository.MemberRepository;
+import com.example.lms.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class BorrowingTransactionServiceImpl implements BorrowingTransactionService {
+
+    private final BorrowingTransactionRepository transactionRepository;
+    private final BookRepository bookRepository;
+    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
+
+    @Override
+    public ApiResponse borrowBook(BorrowRequest request) {
+        Book book = bookRepository.findById(request.bookId())
+                .orElseThrow(() -> new ResourceNotFoundException("Book not found"));
+        Member member = memberRepository.findById(request.memberId())
+                .orElseThrow(() -> new ResourceNotFoundException("Member not found"));
+        User librarian = userRepository.findById(request.processedById())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        BorrowingTransaction tx = BorrowingTransaction.builder()
+                .book(book)
+                .member(member)
+                .processedBy((Librarian) librarian)
+                .borrowDate(LocalDate.now())
+                .dueDate(request.dueDate())
+                .build();
+
+        BorrowingTransaction saved = transactionRepository.save(tx);
+        return ApiResponse.of("Book borrowed successfully", BorrowingTransactionMapper.toResponse(saved));
+    }
+
+    @Override
+    public ApiResponse returnBook(Long transactionId) {
+        BorrowingTransaction tx = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction not found"));
+
+//        tx.setReturnDate(LocalDate.now());
+        BorrowingTransaction updated = transactionRepository.save(tx);
+
+        return ApiResponse.of("Book returned successfully", BorrowingTransactionMapper.toResponse(updated));
+    }
+
+    @Override
+    public ApiResponse getAllTransactions() {
+        List<BorrowResponse> responses = transactionRepository.findAll().stream()
+                .map(BorrowingTransactionMapper::toResponse)
+                .collect(Collectors.toList());
+
+        if (responses.isEmpty()) {
+            return ApiResponse.of("No transactions found");
+        }
+        return ApiResponse.of("Transactions fetched successfully", responses);
+    }
+
+    @Override
+    public ApiResponse getTransactionById(Long id) {
+        BorrowingTransaction tx = transactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Transaction not found"));
+        return ApiResponse.of("Transaction fetched successfully", BorrowingTransactionMapper.toResponse(tx));
+    }
+}

@@ -1,0 +1,13 @@
+package com.example.lms.dto;
+
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
+    Admin, Librarian, Staff;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
+
+}

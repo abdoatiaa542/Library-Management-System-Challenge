@@ -1,0 +1,42 @@
+package com.example.lms.controller;
+
+
+import com.example.lms.dto.BorrowRequest;
+import com.example.lms.model.*;
+import com.example.lms.service.BorrowingTransactionService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/transactions")
+@RequiredArgsConstructor
+public class BorrowingTransactionController {
+
+    private final BorrowingTransactionService transactionService;
+
+    @PostMapping("/borrow")
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<?> borrowBook(@RequestBody BorrowRequest request) {
+        return ResponseEntity.ok(transactionService.borrowBook(request));
+    }
+
+    @PostMapping("/return/{id}")
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<?> returnBook(@PathVariable Long id) {
+        return ResponseEntity.ok(transactionService.returnBook(id));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN','STAFF')")
+    public ResponseEntity<?> getAllTransactions() {
+        return ResponseEntity.ok(transactionService.getAllTransactions());
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','LIBRARIAN','STAFF','MEMBER')")
+    public ResponseEntity<?> getTransactionById(@PathVariable Long id) {
+        return ResponseEntity.ok(transactionService.getTransactionById(id));
+    }
+}
