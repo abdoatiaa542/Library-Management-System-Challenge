@@ -24,7 +24,6 @@ public class BorrowingTransaction {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    // العضو المستعير
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
@@ -33,14 +32,10 @@ public class BorrowingTransaction {
     @JoinColumn(name = "librarian_id", nullable = false)
     private User processedBy;
 
-    // تاريخ الاستعارة
     @Column(nullable = false)
     private LocalDate borrowDate;
 
-    // تاريخ الإرجاع المتوقع
     @Column(nullable = false)
     private LocalDate dueDate;
 
-//     تاريخ الإرجاع الفعلي (ممكن تبقى null لسه ما رجعش)
-//    private LocalDate returnDate;
 }

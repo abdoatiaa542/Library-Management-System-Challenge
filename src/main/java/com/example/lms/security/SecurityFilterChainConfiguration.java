@@ -32,9 +32,7 @@ public class SecurityFilterChainConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/auth/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/api/**"
+                                "/api/transactions/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

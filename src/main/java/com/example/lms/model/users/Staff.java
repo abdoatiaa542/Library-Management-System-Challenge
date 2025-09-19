@@ -12,6 +12,5 @@ import lombok.*;
 @Entity
 @Table(name = "staff")
 public class Staff extends User {
-    // خصائص خاصة بالـ Staff
-    private String shiftTime; // مثال: Morning / Evening
+    private String shiftTime;
 }

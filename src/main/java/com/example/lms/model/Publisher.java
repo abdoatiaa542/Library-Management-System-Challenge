@@ -15,10 +15,8 @@ public class Publisher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // اسم دار النشر
     @Column(nullable = false)
     private String name;
 
-    // البلد / الموقع
     private String country;
 }

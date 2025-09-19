@@ -19,29 +19,22 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // عنوان الكتاب
     @Column(nullable = false)
     private String title;
 
-    // رقم ISBN مميز
     @Column(unique = true, nullable = false, length = 20)
     private String isbn;
 
-    // سنة النشر
     @Column(name = "publication_year")
     private Integer publicationYear;
 
-    // رقم الطبعة
     private String edition;
 
-    // ملخص الكتاب
     @Column(columnDefinition = "TEXT")
     private String summary;
 
-    // لينك لصورة الغلاف
     private String coverImageUrl;
 
-    // Book ↔ Authors (Many-to-Many)
     @ManyToMany
     @JoinTable(
             name = "book_authors",
@@ -50,7 +43,6 @@ public class Book {
     )
     private Set<Author> authors = new HashSet<>();
 
-    // Book ↔ Categories (Many-to-Many)
     @ManyToMany
     @JoinTable(
             name = "book_categories",
@@ -59,7 +51,6 @@ public class Book {
     )
     private Set<Category> categories = new HashSet<>();
 
-    // Book ↔ Publisher (Many-to-One)
     @ManyToOne
     @JoinColumn(name = "publisher_id")
     private Publisher publisher;

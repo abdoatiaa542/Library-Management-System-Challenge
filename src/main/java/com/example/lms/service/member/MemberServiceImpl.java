@@ -1,9 +1,10 @@
-package com.example.lms.service;
+package com.example.lms.service.member;
 
 
 import com.example.lms.dto.ApiResponse;
 import com.example.lms.dto.MemberRequest;
 import com.example.lms.dto.MemberResponse;
+import com.example.lms.dto.Role;
 import com.example.lms.exception.ResourceNotFoundException;
 import com.example.lms.mapper.MemberMapper;
 import com.example.lms.model.users.Member;
@@ -22,11 +23,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ApiResponse addMember(MemberRequest request) {
+        String password = "password"; // just for test
         Member member = Member.builder()
                 .username(request.getFullName())
                 .email(request.getEmail())
                 .phone(request.getPhone())
                 .address(request.getAddress())
+                .password(password)
+                .role(Role.MEMBER)
+                .fullName(request.getFullName())
                 .build();
         Member saved = memberRepository.save(member);
         return ApiResponse.of("Member created successfully", MemberMapper.toResponse(saved));

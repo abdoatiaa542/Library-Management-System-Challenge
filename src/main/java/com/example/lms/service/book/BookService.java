@@ -1,4 +1,4 @@
-package com.example.lms.service;
+package com.example.lms.service.book;
 
 
 import com.example.lms.dto.ApiResponse;

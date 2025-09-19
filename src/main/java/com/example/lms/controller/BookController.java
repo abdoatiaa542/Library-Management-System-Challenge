@@ -1,7 +1,7 @@
 package com.example.lms.controller;
 
 import com.example.lms.dto.BookRequest;
-import com.example.lms.service.BookService;
+import com.example.lms.service.book.BookService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

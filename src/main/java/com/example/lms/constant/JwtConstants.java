@@ -2,7 +2,7 @@ package com.example.lms.constant;
 
 public interface JwtConstants {
     String JWT_HEADER_PREFIX = "Bearer ";
-    String ISSUER = "FitAI";
+    String ISSUER = "LMS";
     String REGISTRATION_CLAIM = "registration";
     String ROLE_CLAIM = "role";
     String EMAIL_CLAIM = "email";

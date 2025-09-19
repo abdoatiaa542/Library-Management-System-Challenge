@@ -2,7 +2,7 @@ package com.example.lms.controller;
 
 
 import com.example.lms.dto.MemberRequest;
-import com.example.lms.service.MemberService;
+import com.example.lms.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

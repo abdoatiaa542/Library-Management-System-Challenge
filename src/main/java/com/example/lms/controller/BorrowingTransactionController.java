@@ -2,8 +2,7 @@ package com.example.lms.controller;
 
 
 import com.example.lms.dto.BorrowRequest;
-import com.example.lms.model.*;
-import com.example.lms.service.BorrowingTransactionService;
+import com.example.lms.service.borrowingtransaction.BorrowingTransactionService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +17,7 @@ public class BorrowingTransactionController {
 
     private final BorrowingTransactionService transactionService;
     private static final Logger log = LoggerFactory.getLogger(BorrowingTransactionController.class);
+
 
     @PostMapping("/borrow")
     @PreAuthorize("hasRole('MEMBER')")

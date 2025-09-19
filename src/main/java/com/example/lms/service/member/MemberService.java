@@ -1,4 +1,4 @@
-package com.example.lms.service;
+package com.example.lms.service.member;
 
 import com.example.lms.dto.ApiResponse;
 import com.example.lms.dto.MemberRequest;

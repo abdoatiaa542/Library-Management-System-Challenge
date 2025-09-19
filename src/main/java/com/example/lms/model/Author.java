@@ -15,11 +15,9 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // اسم المؤلف
     @Column(nullable = false)
     private String name;
 
-    // سيرة قصيرة
     @Column(columnDefinition = "TEXT")
     private String biography;
 }

@@ -18,12 +18,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // اسم التصنيف
     @Column(nullable = false)
     private String name;
 
-    // هيكل هرمي: ممكن يبقى التصنيف ابن من تصنيف تاني
-//    @ManyToOne
-//    @JoinColumn(name = "parent_id")
-//    private Category parentCategory;
 }

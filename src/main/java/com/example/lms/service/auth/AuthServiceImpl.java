@@ -80,22 +80,22 @@ public class AuthServiceImpl implements IAuthService {
 
     @Override
     public ApiResponse registerAdmin(RegistrationRequest request) {
-        return registerUserWithRole(request, Role.Admin);
+        return registerUserWithRole(request, Role.ADMIN);
     }
 
     @Override
     public ApiResponse registerLibrarian(RegistrationRequest request) {
-        return registerUserWithRole(request, Role.Librarian);
+        return registerUserWithRole(request, Role.LIBRARIAN);
     }
 
     @Override
     public ApiResponse registerStaff(RegistrationRequest request) {
-        return registerUserWithRole(request, Role.Staff);
+        return registerUserWithRole(request, Role.STAFF);
     }
 
     @Override
     public Object registerMember(RegistrationRequest request) {
-        return registerUserWithRole(request, Role.Member);
+        return registerUserWithRole(request, Role.MEMBER);
     }
 
 

@@ -11,6 +11,6 @@ import lombok.*;
 @Entity
 @Table(name = "librarians")
 public class Librarian extends User {
-    // خصائص خاصة بالمكتبي
-    private String assignedSection; // مثال: قسم الروايات / قسم التاريخ
+
+    private String assignedSection;
 }
